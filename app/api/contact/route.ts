@@ -57,3 +57,11 @@
 //     );
 //   }
 // }
+
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const data = await req.json();
+  // Handle your contact form logic here
+  return NextResponse.json({ message: "Success" });
+}
