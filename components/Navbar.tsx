@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Menu, Sparkles } from "lucide-react";
+import { Award, CheckCircle, Menu, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
@@ -150,12 +150,15 @@ const Navbar: React.FC = () => {
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600"
               >
-                <Image
-                  src="/images/logo.png"
-                  alt="Description of the image"
-                  width={64}
-                  height={64}
-                />
+                <div className="flex items-center space-x-2">
+                  <h1 className="text-5xl font-bold text-gray-800 font-poppins shadow-lg transform transition duration-500 hover:scale-105">
+                    <span className="text-amber-500">Q</span>
+                    <span className="text-amber-500">F</span>
+                    <span className="text-amber-500">D</span>
+                  </h1>
+                  <Award className="text-amber-500 w-8 h-8" />
+                  <CheckCircle className="text-amber-500 w-8 h-8" />
+                </div>
               </motion.div>
             </a>
           </Link>
