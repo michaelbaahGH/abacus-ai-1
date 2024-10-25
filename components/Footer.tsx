@@ -116,11 +116,10 @@ const Footer = () => {
             <CardContent className="p-6">
               <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent flex items-center gap-2">
                 <Shell className="w-6 h-6 text-amber-400" />
-                ADA YFFD MIDDLE BELT COMPANY LTD
+                Quality Food Distributors Ghana Ltd
               </h3>
               <p className="mb-6 text-amber-100/70">
-                A leading salt production company, empowering the people of Ada
-                through sustainable economic opportunities.
+                Delivering the finest processed cashews worldwide,
               </p>
               <div className="p-4 bg-stone-800/30 rounded-lg border border-amber-500/20">
                 <h4 className="flex items-center gap-2 text-amber-300 font-semibold mb-2">
@@ -128,8 +127,8 @@ const Footer = () => {
                   Our Mission
                 </h4>
                 <p className="text-amber-100/70 italic">
-                  "Empowering the people of Ada through sustainable economic
-                  opportunities."
+                  Empowering the community of Drobo through sustainable and
+                  ethical practices.
                 </p>
               </div>
             </CardContent>
@@ -144,10 +143,7 @@ const Footer = () => {
               <div className="space-y-4 text-amber-100/70">
                 <p className="flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                  <span>
-                    Ada, Greater Accra Region, Ghana P.O. Box 49 Ada, Greater
-                    Accra Region, Ghana
-                  </span>
+                  <span>Drobo, Bono Region, Ghana</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-5 h-5 text-amber-400" />
@@ -155,7 +151,7 @@ const Footer = () => {
                     href="tel:0596009007"
                     className="hover:text-amber-400 transition-colors"
                   >
-                    0596009007
+                    +233 24 000 0000
                   </a>
                 </p>
                 <p className="flex items-center gap-2">
@@ -164,7 +160,7 @@ const Footer = () => {
                     href="mailto:adayffd9007@gmail.com"
                     className="hover:text-amber-400 transition-colors"
                   >
-                    adayffd9007@gmail.com
+                    export@qualityfoodghana.com
                   </a>
                 </p>
               </div>
@@ -214,7 +210,8 @@ const Footer = () => {
 
           {/* Copyright */}
           <p className="text-amber-100/60 text-center">
-            © 2024 ADA YFFD MIDDLE BELT COMPANY LTD. All rights reserved.
+            © 2024 Quality Food Distributors Ghana Ltd. Committed to Quality,
+            Sustainability, and Global Partnerships. All Rights Reserved.
           </p>
         </div>
       </div>
