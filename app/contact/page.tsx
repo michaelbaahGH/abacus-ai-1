@@ -80,10 +80,11 @@ function ContactHero() {
           <MessageCircle className="w-16 h-16 text-amber-400" />
         </motion.div>
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600">
-          Get in Touch
+          Contact Us
         </h1>
-        <p className="text-xl md:text-2xl text-amber-100/80">
-          We'd love to hear from you
+        <p className="text-xl md:text-2xl text-amber-100/80 max-w-2xl mx-auto px-4">
+          At Quality Food Distributors Ghana Ltd., we welcome inquiries from
+          businesses and clients worldwide seeking premium processed cashews.
         </p>
       </motion.div>
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-stone-950 to-transparent" />
@@ -175,7 +176,7 @@ function EnhancedContactForm() {
             <Input
               type="text"
               name="phone"
-              placeholder="Your phone number"
+              placeholder="Your Phone Number"
               value={formData.phone}
               onChange={handleChange}
               required
@@ -220,26 +221,26 @@ function EnhancedContactInfo() {
       <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-amber-100">
-            Contact Information
+            Company Information
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {[
             {
               icon: <Phone className="text-amber-400" />,
-              text: "0596009007",
+              text: "+233 24 000 0000",
             },
             {
               icon: <Mail className="text-amber-400" />,
-              text: "adayffd9007@gmail.com",
+              text: "export@qualityfoodghana.com",
             },
             {
               icon: <MapPin className="text-amber-400" />,
-              text: "Ada, Greater Accra Region Ghana, West Africa",
+              text: "Drobo, Bono Region, Ghana",
             },
             {
-              icon: <Mail className="text-amber-400" />,
-              text: "P.O. Box 49 Ada, Greater Accra Region Ghana, West Africa",
+              icon: <Clock className="text-amber-400" />,
+              text: "Monday to Friday – 8:00 AM to 6:00 PM (GMT)",
             },
           ].map((item, index) => (
             <motion.div
@@ -281,7 +282,7 @@ function EnhancedMap() {
         </CardHeader>
         <CardContent className="p-0">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127172.71269254878!2d0.5068750891276051!3d5.784885999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10207f49578add47%3A0xe4de8752a49b3c56!2sAda%2C%20Ghana!5e0!3m2!1sen!2s!4v1698075188001!5m2!1sen!2s"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15835.194553129592!2d-2.7854166744584957!3d7.583333299999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfe13ded6fd61c2b%3A0x15a827c058a52c76!2sDrobo%2C%20Ghana!5e0!3m2!1sen!2s!4v1698247027099!5m2!1sen!2s"
             width="100%"
             height="450"
             style={{ border: 0 }}
