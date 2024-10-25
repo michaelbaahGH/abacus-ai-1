@@ -1032,7 +1032,7 @@ const QualityAssuranceSection = () => {
 
 export default function ServicesPage() {
   return (
-    <main className="">
+    <main className="min-h-screen bg-stone-950 text-green-100">
       {/* Hero Section - Top section with main value proposition */}
       <Hero />
 
