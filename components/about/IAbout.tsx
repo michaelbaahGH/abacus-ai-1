@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
   useScroll,
   useTransform,
   useSpring,
+  useMotionValue,
 } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Waves,
   Heart,
@@ -31,46 +31,344 @@ import {
   PackageCheck,
   Award,
   Ribbon as Certificate,
+  Truck,
+  Ship,
+  Plane,
+  Compass,
+  Globe,
+  Map,
 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-// Keep existing Particles component unchanged
-const Particles = () => {
+// Enhanced 3D Card component with parallax effect
+// interface ParallaxCardProps {
+//   children: React.ReactNode;
+// }
+
+// const ParallaxCard: React.FC<ParallaxCardProps> = ({ children }) => {
+//   const cardRef = useRef<HTMLDivElement | null>(null);
+//   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+//   const [rotation, setRotation] = useState({ x: 0, y: 0 });
+
+//   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+//     if (!cardRef.current) return;
+//     const rect = cardRef.current.getBoundingClientRect();
+//     const centerX = rect.left + rect.width / 2;
+//     const centerY = rect.top + rect.height / 2;
+//     const mouseX = e.clientX - centerX;
+//     const mouseY = e.clientY - centerY;
+
+//     setMousePosition({ x: mouseX, y: mouseY });
+//     setRotation({
+//       x: (mouseY / rect.height) * 20,
+//       y: -(mouseX / rect.width) * 20,
+//     });
+//   };
+
+//   return (
+//     <motion.div
+//       ref={cardRef}
+//       onMouseMove={handleMouseMove}
+//       onMouseLeave={() => setRotation({ x: 0, y: 0 })}
+//       style={{
+//         transformStyle: "preserve-3d",
+//         transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+//       }}
+//       transition={{ type: "spring", stiffness: 300, damping: 30 }}
+//       className="relative w-full h-full"
+//     >
+//       {children}
+//     </motion.div>
+//   );
+// };
+
+// // Enhanced FreightParticles with 3D perspective and interactive elements
+// const FreightParticles = () => {
+//   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+//   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+//   const containerRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     setWindowSize({
+//       width: window.innerWidth,
+//       height: window.innerHeight,
+//     });
+
+//     const handleResize = () => {
+//       setWindowSize({
+//         width: window.innerWidth,
+//         height: window.innerHeight,
+//       });
+//     };
+
+//     // Use native MouseEvent here
+//     const handleMouseMove = (e: MouseEvent) => {
+//       if (!containerRef.current) return;
+//       const rect = containerRef.current.getBoundingClientRect();
+//       setMousePosition({
+//         x: (e.clientX - rect.left) / rect.width,
+//         y: (e.clientY - rect.top) / rect.height,
+//       });
+//     };
+
+//     window.addEventListener("resize", handleResize);
+//     window.addEventListener("mousemove", handleMouseMove);
+
+//     return () => {
+//       window.removeEventListener("resize", handleResize);
+//       window.removeEventListener("mousemove", handleMouseMove);
+//     };
+//   }, []);
+
+//   // Create dynamic routes based on mouse position
+//   const generateRoutes = () => {
+//     const routes = [];
+//     const numRoutes = 30;
+
+//     for (let i = 0; i < numRoutes; i++) {
+//       const startX = Math.random() * windowSize.width;
+//       const startY = Math.random() * windowSize.height;
+//       const endX = mousePosition.x * windowSize.width;
+//       const endY = mousePosition.y * windowSize.height;
+
+//       routes.push({
+//         id: i,
+//         start: { x: startX, y: startY },
+//         end: { x: endX, y: endY },
+//         duration: Math.random() * 10 + 20,
+//       });
+//     }
+
+//     return routes;
+//   };
+
+//   const routes = generateRoutes();
+
+//   return (
+//     <div
+//       ref={containerRef}
+//       className="absolute inset-0 overflow-hidden pointer-events-none perspective-1000"
+//     >
+//       {/* Interactive route lines */}
+//       {routes.map((route) => (
+//         <motion.div
+//           key={route.id}
+//           className="absolute h-px bg-gradient-to-r from-cyan-400/10 via-blue-500/10 to-purple-500/10"
+//           style={{
+//             width: Math.random() * 300 + 100,
+//             transformStyle: "preserve-3d",
+//             translateZ: Math.random() * 50,
+//           }}
+//           animate={{
+//             x: [route.start.x, route.end.x],
+//             y: [route.start.y, route.end.y],
+//             opacity: [0, 0.6, 0],
+//             scale: [1, 1.2, 1],
+//           }}
+//           transition={{
+//             duration: route.duration,
+//             repeat: Infinity,
+//             ease: "linear",
+//           }}
+//         />
+//       ))}
+
+//       {/* Enhanced vehicles with 3D movement and glow effects */}
+//       <AnimatePresence>
+//         {Array.from({ length: 8 }).map((_, i) => (
+//           <motion.div
+//             key={`vehicle-${i}`}
+//             className="absolute"
+//             initial={{ scale: 0, opacity: 0 }}
+//             animate={{
+//               scale: 1,
+//               opacity: 1,
+//               x: [0, windowSize.width],
+//               y: [
+//                 Math.random() * windowSize.height,
+//                 Math.random() * windowSize.height,
+//               ],
+//               rotateY: [0, 360],
+//               z: [0, 100, 0],
+//             }}
+//             exit={{ scale: 0, opacity: 0 }}
+//             transition={{
+//               duration: Math.random() * 20 + 30,
+//               repeat: Infinity,
+//               ease: "linear",
+//             }}
+//           >
+//             <div className="relative">
+//               <div className="absolute inset-0 bg-cyan-500/20 blur-xl" />
+//               {i % 3 === 0 ? (
+//                 <Truck className="w-8 h-8 text-cyan-400" />
+//               ) : i % 3 === 1 ? (
+//                 <Ship className="w-10 h-10 text-blue-400" />
+//               ) : (
+//                 <Plane className="w-8 h-8 text-purple-400" />
+//               )}
+//             </div>
+//           </motion.div>
+//         ))}
+//       </AnimatePresence>
+
+//       {/* Global trade routes visualization */}
+//       <motion.div
+//         className="absolute inset-0"
+//         style={{
+//           background:
+//             "radial-gradient(circle at center, rgba(6, 182, 212, 0.1) 0%, transparent 70%)",
+//           transform: `translate(${mousePosition.x * 20}px, ${
+//             mousePosition.y * 20
+//           }px)`,
+//         }}
+//       />
+//     </div>
+//   );
+// };
+
+// // Enhanced Story component with premium features
+// function Story() {
+//   const { ref, inView } = useInView({
+//     threshold: 0.2,
+//     triggerOnce: true,
+//   });
+
+//   const { scrollYProgress } = useScroll();
+//   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+//   const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
+
+//   return (
+//     <section
+//       ref={ref}
+//       className="py-32 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden"
+//     >
+//       <FreightParticles />
+//       <div className="container mx-auto px-4">
+//         <ParallaxCard>
+//           <Card className="bg-slate-900/50 backdrop-blur-xl border-cyan-500/20 overflow-hidden shadow-2xl shadow-cyan-500/10 transition-all duration-500">
+//             <CardContent className="p-8 md:p-12 relative">
+//               <motion.div
+//                 className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-blue-500/5 to-purple-500/5"
+//                 animate={{
+//                   backgroundPosition: ["0% 0%", "100% 100%"],
+//                 }}
+//                 transition={{
+//                   duration: 20,
+//                   repeat: Infinity,
+//                   repeatType: "reverse",
+//                 }}
+//               />
+
+//               <motion.h2
+//                 style={{ scale, y }}
+//                 className="text-4xl md:text-6xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
+//               >
+//                 Our Story
+//               </motion.h2>
+
+//               <div className="space-y-8 text-cyan-100/80 relative z-10">
+//                 <motion.div
+//                   initial={{ opacity: 0, y: 50 }}
+//                   animate={inView ? { opacity: 1, y: 0 } : {}}
+//                   transition={{ duration: 0.8, delay: 0.2 }}
+//                   className="relative p-6 backdrop-blur-xl rounded-lg border border-cyan-500/20 hover:border-cyan-500/40 transition-all duration-500"
+//                 >
+//                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg" />
+//                   <p className="text-lg md:text-xl leading-relaxed">
+//                     Founded in Drobo, Bono Region, Quality Food Distributors
+//                     Ghana Ltd has evolved into a leading exporter of premium
+//                     processed cashews. Our journey began with a vision to
+//                     connect Ghanaian farmers with global markets while
+//                     maintaining the highest standards of quality and
+//                     sustainability.
+//                   </p>
+//                 </motion.div>
+
+//                 {/* Additional story sections with similar premium styling */}
+//                 {/* ... */}
+//               </div>
+//             </CardContent>
+//           </Card>
+//         </ParallaxCard>
+//       </div>
+//     </section>
+//   );
+// }
+
+interface ParallaxCardProps {
+  children: React.ReactNode;
+}
+
+const ParallaxCard: React.FC<ParallaxCardProps> = ({ children }) => (
+  <div className="relative w-full h-full">
+    <div className="bg-gradient-to-r from-cyan-400 to-blue-500 p-8 rounded-xl shadow-lg">
+      {children}
+    </div>
+  </div>
+);
+
+// Subtle Freight Particles (without strong parallax effects)
+const FreightParticles = () => {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
 
     const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const particles = Array.from({ length: 50 });
+  const generateRoutes = () => {
+    const routes = [];
+    const numRoutes = 10;
+
+    for (let i = 0; i < numRoutes; i++) {
+      routes.push({
+        id: i,
+        duration: Math.random() * 10 + 20,
+        width: Math.random() * 200 + 50,
+      });
+    }
+
+    return routes;
+  };
+
+  const routes = generateRoutes();
+
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((_, i) => (
+    <div
+      ref={containerRef}
+      className="absolute inset-0 overflow-hidden pointer-events-none"
+    >
+      {routes.map((route) => (
         <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-amber-400/30 rounded-full"
-          initial={{
-            x: Math.random() * windowSize.width,
-            y: Math.random() * windowSize.height,
+          key={route.id}
+          className="absolute h-px bg-gradient-to-r from-cyan-400/20 to-purple-500/10"
+          style={{
+            width: route.width,
+            top: Math.random() * windowSize.height,
+            left: Math.random() * windowSize.width,
           }}
           animate={{
-            x: Math.random() * windowSize.width,
-            y: Math.random() * windowSize.height,
+            opacity: [0, 0.6, 0],
+            scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: Math.random() * 10 + 20,
+            duration: route.duration,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -80,556 +378,43 @@ const Particles = () => {
   );
 };
 
-const values = [
-  {
-    icon: <Scale className="w-12 h-12" />,
-    title: "Quality",
-    description: "We never compromise on the quality of our cashews",
-  },
-  {
-    icon: <Leaf className="w-12 h-12" />,
-    title: "Sustainability",
-    description: "Supporting local farmers and eco-friendly practices",
-  },
-  {
-    icon: <ShieldCheck className="w-12 h-12" />,
-    title: "Integrity",
-    description: "Transparency and reliability in all business operations",
-  },
-  {
-    icon: <Heart className="w-12 h-12" />,
-    title: "Customer Satisfaction",
-    description: "Building long-term relationships with global clients",
-  },
-];
-
-function Hero() {
-  const { scrollYProgress } = useScroll();
-  const springScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const heroOpacity = useTransform(springScrollProgress, [0, 0.3], [1, 0]);
-  const heroScale = useTransform(springScrollProgress, [0, 0.3], [1, 1.1]);
-  const textY = useTransform(springScrollProgress, [0, 0.3], [0, -50]);
-
-  return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      <Particles />
-      <motion.div
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="absolute inset-0 z-0"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-700/20 mix-blend-overlay z-10" />
-        <img
-          src="/api/placeholder/2000/1000"
-          alt="Quality Food Distributors Facility"
-          className="object-cover w-full h-full"
-        />
-      </motion.div>
-
-      <motion.div
-        style={{ y: textY }}
-        className="relative z-20 text-center max-w-5xl px-4"
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 200,
-            damping: 20,
-            delay: 0.5,
-          }}
-          className="mb-6"
-        >
-          <Sparkles className="w-20 h-20 text-amber-400 mx-auto animate-pulse" />
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600"
-        >
-          About Quality Food Distributors
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="text-2xl md:text-4xl text-amber-100 font-light tracking-wide mb-12"
-        >
-          Your Trusted Partner in Premium Cashew Processing
-        </motion.p>
-      </motion.div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-stone-950 to-transparent" />
-    </section>
-  );
-}
-
 function Story() {
-  const [ref, inView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
-
-  const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.2,
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    }),
-  };
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
 
   return (
     <section
       ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-950 to-stone-900 relative"
+      className="py-32 bg-gradient-to-b from-slate-950 to-slate-900 relative overflow-hidden"
     >
-      <Particles />
+      <FreightParticles />
       <div className="container mx-auto px-4">
-        <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20 overflow-hidden">
-          <CardContent className="p-12">
+        <ParallaxCard>
+          <div className="p-8 md:p-12 bg-slate-900/60 backdrop-blur-lg rounded-lg shadow-xl">
             <motion.h2
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold mb-12 text-center bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent"
+              className="text-4xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600"
             >
               Our Story
             </motion.h2>
 
-            <div className="space-y-8 text-amber-100/80">
+            <div className="space-y-8 text-cyan-100/80">
               <motion.p
-                variants={fadeInUpVariants}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-                custom={0}
-                className="text-lg md:text-xl leading-relaxed"
+                initial={{ opacity: 0, y: 30 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="leading-relaxed"
               >
                 Founded in Drobo, Bono Region, Quality Food Distributors Ghana
-                Ltd has evolved into a leading exporter of premium processed
+                Ltd has grown to become a leading exporter of premium processed
                 cashews. Our journey began with a vision to connect Ghanaian
                 farmers with global markets while maintaining the highest
                 standards of quality and sustainability.
               </motion.p>
-              <motion.p
-                variants={fadeInUpVariants}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-                custom={1}
-                className="text-lg md:text-xl leading-relaxed"
-              >
-                Our mission is clear: to be a trusted partner in the global
-                cashew supply chain by delivering high-quality processed cashews
-                while supporting sustainable farming practices and contributing
-                to the local Ghanaian economy. We're dedicated to ethical
-                sourcing, state-of-the-art processing, and timely delivery to
-                international markets.
-              </motion.p>
-              <motion.p
-                variants={fadeInUpVariants}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-                custom={2}
-                className="text-lg md:text-xl leading-relaxed"
-              >
-                Today, we foster a collaborative work environment that
-                prioritizes excellence, innovation, and sustainability. Our
-                success is measured not just in export volumes, but in the
-                positive impact we make on local farmers, our employees, and the
-                global customers we serve.
-              </motion.p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-    </section>
-  );
-}
-
-function Values() {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  return (
-    <section
-      ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-800 to-stone-950 relative"
-    >
-      <Particles />
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-            Our Core Values
-          </h2>
-          <p className="text-xl text-amber-100/60 mt-4 max-w-2xl mx-auto">
-            The principles that guide our commitment to excellence
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {values.map((value, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20 h-full">
-                <CardContent className="p-8 text-center">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="text-amber-400 mb-6 inline-block"
-                  >
-                    {value.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-amber-100 mb-4">
-                    {value.title}
-                  </h3>
-                  <p className="text-amber-100/60">{value.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Team() {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const teamMembers = [
-    {
-      name: "John Doe",
-      role: "Chief Executive Officer",
-      description:
-        "With over 15 years in the cashew industry, John leads our vision for sustainable processing and global distribution. His expertise in international trade has been instrumental in establishing our global presence.",
-      icon: <Briefcase className="w-16 h-16" />,
-    },
-    {
-      name: "Sarah Smith",
-      role: "Operations Director",
-      description:
-        "Sarah brings 12 years of food processing experience, ensuring excellence in our processing facilities and maintaining the highest quality standards in the industry.",
-      icon: <Factory className="w-16 h-16" />,
-    },
-    {
-      name: "Michael Johnson",
-      role: "Global Sales Manager",
-      description:
-        "With a decade of experience in international sales, Michael has successfully built lasting relationships with clients across Europe and Asia.",
-      icon: <Users className="w-16 h-16" />,
-    },
-  ];
-
-  return (
-    <section
-      ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-900 to-stone-800 relative"
-    >
-      <Particles />
-      <div className="container mx-auto px-4">
-        <motion.h2
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent mb-16"
-        >
-          Our Leadership Team
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {teamMembers.map((member, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-            >
-              <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20">
-                <CardContent className="p-8 text-center">
-                  <div className="mb-6">
-                    <img
-                      src={`/api/placeholder/150/150`}
-                      alt={member.name}
-                      className="w-32 h-32 rounded-full mx-auto mb-4"
-                    />
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      className="text-amber-400 inline-block"
-                    >
-                      {member.icon}
-                    </motion.div>
-                  </div>
-                  <h3 className="text-xl font-semibold text-amber-100 mb-2">
-                    {member.name}
-                  </h3>
-                  <h4 className="text-lg text-amber-400 mb-4">{member.role}</h4>
-                  <p className="text-amber-100/60">{member.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Culture() {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const testimonials = [
-    {
-      quote:
-        "Working at Quality Food Distributors has been a rewarding experience, as we prioritize quality and sustainability in everything we do.",
-      author: "Emma Wilson",
-      position: "Quality Control Specialist",
-    },
-    {
-      quote:
-        "The company's commitment to both environmental sustainability and employee growth makes this a truly special place to work.",
-      author: "David Chen",
-      position: "Production Supervisor",
-    },
-  ];
-
-  return (
-    <section
-      ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-800 to-stone-900 relative"
-    >
-      <Particles />
-      <div className="container mx-auto px-4">
-        <motion.h2
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent mb-16"
-        >
-          Our Culture
-        </motion.h2>
-
-        <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20 mb-16">
-          <CardContent className="p-8">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              className="text-lg text-amber-100/80 text-center mb-12"
-            >
-              At Quality Food Distributors, we foster a culture of integrity,
-              collaboration, and sustainability, ensuring a positive work
-              environment that supports our team and the community.
-            </motion.p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: index * 0.2 }}
-                >
-                  <Card className="bg-stone-800/50 border-amber-500/10">
-                    <CardContent className="p-6">
-                      <MessageSquare className="w-8 h-8 text-amber-400 mb-4" />
-                      <p className="text-amber-100/80 italic mb-4">
-                        "{testimonial.quote}"
-                      </p>
-                      <p className="text-amber-400 font-semibold">
-                        {testimonial.author}
-                      </p>
-                      <p className="text-amber-100/60">
-                        {testimonial.position}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </section>
-  );
-}
-
-function USP() {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const features = [
-    {
-      icon: <PackageCheck className="w-12 h-12" />,
-      title: "Premium Quality",
-      description:
-        "State-of-the-art processing ensuring the finest cashew quality",
-    },
-    {
-      icon: <Scale className="w-12 h-12" />,
-      title: "Ethical Sourcing",
-      description:
-        "Direct partnerships with local farmers ensuring fair practices",
-    },
-    {
-      icon: <Star className="w-12 h-12" />,
-      title: "Custom Solutions",
-      description: "Tailored packaging and delivery options for every client",
-    },
-  ];
-
-  return (
-    <section
-      ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-900 to-stone-800 relative"
-    >
-      <Particles />
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent mb-6">
-            Why Choose Us
-          </h2>
-          <p className="text-xl text-amber-100/60 max-w-3xl mx-auto">
-            We stand out in the market through our commitment to ethical
-            sourcing, stringent quality control, and personalized customer
-            service.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20 h-full">
-                <CardContent className="p-8 text-center">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="text-amber-400 mb-6 inline-block"
-                  >
-                    {feature.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-amber-100 mb-4">
-                    {feature.title}
-                  </h3>
-                  <p className="text-amber-100/60">{feature.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Awards() {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const achievements = [
-    {
-      icon: <Certificate className="w-12 h-12" />,
-      title: "ISO 22000:2018",
-      description: "Certified for Food Safety Management Systems",
-    },
-    {
-      icon: <Award className="w-12 h-12" />,
-      title: "HACCP Certified",
-      description: "Meeting international food safety standards",
-    },
-    {
-      icon: <Trophy className="w-12 h-12" />,
-      title: "Best Exporter 2023",
-      description: "Ghana Export Promotion Authority Award",
-    },
-  ];
-
-  return (
-    <section
-      ref={ref}
-      className="py-32 bg-gradient-to-b from-stone-800 to-stone-950 relative"
-    >
-      <Particles />
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent mb-6">
-            Awards & Certifications
-          </h2>
-          <p className="text-xl text-amber-100/60 max-w-3xl mx-auto">
-            Our commitment to excellence has been recognized through multiple
-            certifications and awards
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {achievements.map((achievement, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="bg-stone-900/50 backdrop-blur-lg border-amber-500/20 h-full">
-                <CardContent className="p-8 text-center">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="text-amber-400 mb-6 inline-block"
-                  >
-                    {achievement.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-amber-100 mb-4">
-                    {achievement.title}
-                  </h3>
-                  <p className="text-amber-100/60">{achievement.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+          </div>
+        </ParallaxCard>
       </div>
     </section>
   );
@@ -637,14 +422,14 @@ function Awards() {
 
 export default function AboutPage() {
   return (
-    <main className="bg-stone-950 min-h-screen">
-      <Hero />
+    <main className="bg-slate-950 min-h-screen overflow-hidden">
+      {/* <Hero /> */}
       <Story />
-      <Team />
+      {/* <Team />
       <Culture />
       <USP />
       <Values />
-      <Awards />
+      <Awards /> */}
     </main>
   );
 }
