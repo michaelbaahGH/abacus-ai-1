@@ -8,8 +8,8 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Golden Harvest Cashews Ltd.",
-  description: "Premium organic cashew nuts from Ghana",
+  title: "From abacus and other ai systems",
+  description: "Just do you. you are great",
 };
 
 export default function RootLayout({
